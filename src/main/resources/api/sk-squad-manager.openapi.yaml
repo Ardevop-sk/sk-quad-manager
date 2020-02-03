@@ -1,0 +1,192 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Manager for sk-SQUAD corpus
+  description: Simple CRUD application for managing sk-SQUAD corpus
+  contact:
+    name: Filip Bednárik
+    email: info@ardevop.sk
+    url: https://ardevop.sk
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://sk-squad.ardevop.sk
+paths:
+  /importCorpus:
+    post:
+      summary: Import corpus from json file
+      operationId: importCorpus
+      tags:
+        - corpus
+      requestBody:
+        description: JSON object of whole SQUAD corpus
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Corpus'
+      responses:
+        '200':
+          description: Success
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /datasets:
+    get:
+      summary: List all corpus dataset
+      operationId: listDatasets
+      tags:
+        - dataset
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A paged array of corpus datasets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dataset"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a corpus dataset
+      operationId: createCorpusDataset
+      tags:
+        - dataset
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /dataset/{datasetTitle}:
+    get:
+      summary: Info for a specific dataset
+      tags:
+        - dataset
+      parameters:
+        - name: datasetTitle
+          in: path
+          required: true
+          description: The title of the corpus dataset to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dataset"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Corpus:
+      type: object
+      required:
+        - version
+        - data
+      properties:
+        version:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dataset'
+        language:
+          type: string
+          default: 'en'
+    Dataset:
+      type: object
+      required:
+        - title
+        - paragraphs
+      properties:
+        title:
+          type: string
+        paragraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paragraph'
+    Paragraph:
+      type: object
+      required:
+        - qas
+        - context
+      properties:
+        qas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Qas'
+        context:
+          type: string
+    Qas:
+      type: object
+      required:
+        - id
+        - question
+        - is_impossible
+        - answers
+      properties:
+        question:
+          type: string
+        id:
+          type: string
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+        is_impossible:
+          type: boolean
+        plaussible_answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+    Answer:
+      type: object
+      required:
+        - text
+        - answer_start
+      properties:
+        text:
+          type: string
+        answer_start:
+          type: integer
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
