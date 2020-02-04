@@ -13,7 +13,26 @@ info:
 servers:
   - url: https://sk-squad.ardevop.sk
 paths:
-  /importCorpus:
+  /corpus:
+    post:
+      summary: Create new corpus
+      operationId: createCorpus
+      tags:
+        - corpus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorpusBase'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Corpus"
+  /corpus/import:
     post:
       summary: Import corpus from json file
       operationId: importCorpus
@@ -72,9 +91,20 @@ paths:
       operationId: createCorpusDataset
       tags:
         - dataset
+      requestBody:
+        description: Desc
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetBase'
       responses:
-        '201':
-          description: Null response
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dataset"
         default:
           description: unexpected error
           content:
@@ -108,39 +138,59 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   schemas:
-    Corpus:
+    CorpusBase:
       type: object
       required:
         - version
-        - data
       properties:
         version:
           type: string
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Dataset'
         language:
           type: string
           default: 'en'
-    Dataset:
+    Corpus:
+      allOf:
+        - $ref: '#/components/schemas/CorpusBase'
+        - type: object
+          required:
+            - data
+          properties:
+            id:
+              type: string
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Dataset'
+    DatasetBase:
       type: object
       required:
         - title
-        - paragraphs
       properties:
+        source:
+          type: string
         title:
           type: string
-        paragraphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/Paragraph'
+    Dataset:
+      allOf:
+        - $ref: '#/components/schemas/DatasetBase'
+        - type: object
+          required:
+            - paragraphs
+          properties:
+            id:
+              type: string
+            paragraphs:
+              type: array
+              items:
+                $ref: '#/components/schemas/Paragraph'
     Paragraph:
       type: object
       required:
         - qas
         - context
       properties:
+        id:
+          type: string
         qas:
           type: array
           items:
@@ -175,6 +225,8 @@ components:
         - text
         - answer_start
       properties:
+        author:
+          type: string
         text:
           type: string
         answer_start:
