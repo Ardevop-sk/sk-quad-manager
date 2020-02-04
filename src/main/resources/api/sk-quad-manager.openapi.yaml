@@ -54,20 +54,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /datasets:
+  /corpus/{corpusId}:
+    get:
+      summary: Get corpus by Id
+      operationId: getCorpus
+      tags:
+        - corpus
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Corpus"
+      parameters:
+        - name: corpusId
+          in: path
+          required: true
+          description: The id of the corpus to retrieve
+          schema:
+            type: string
+
+  /corpus/{corpusId}/dataset:
     get:
       summary: List all corpus dataset
       operationId: listDatasets
       tags:
         - dataset
       parameters:
-        - name: limit
-          in: query
-          description: How many items to return at one time (max 100)
-          required: false
+        - name: corpusId
+          in: path
+          required: true
+          description: The id of the corpus
           schema:
-            type: integer
-            format: int32
+            type: string
       responses:
         '200':
           description: A paged array of corpus datasets
@@ -91,6 +111,13 @@ paths:
       operationId: createCorpusDataset
       tags:
         - dataset
+      parameters:
+        - name: corpusId
+          in: path
+          required: true
+          description: The id of the corpus
+          schema:
+            type: string
       requestBody:
         description: Desc
         required: true
@@ -111,16 +138,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /dataset/{datasetTitle}:
+  /dataset/{datasetId}:
     get:
       summary: Info for a specific dataset
       tags:
         - dataset
       parameters:
-        - name: datasetTitle
+        - name: datasetId
           in: path
           required: true
-          description: The title of the corpus dataset to retrieve
+          description: The id of the corpus dataset to retrieve
           schema:
             type: string
       responses:

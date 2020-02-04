@@ -1,5 +1,6 @@
 package sk.ardevop.nlp.skquadmanager.controller;
 
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +27,13 @@ public class CorpusApiController implements CorpusApi {
     return ResponseEntity.ok(
         restDTOMapper.corpusRestDTO(
             corpusRepository.save(restDTOMapper.corpus(corpusBaseRestDTO))));
+  }
+
+  @Override
+  public ResponseEntity<CorpusRestDTO> getCorpus(String corpusId) {
+    return ResponseEntity.of(
+        Optional.ofNullable(
+            restDTOMapper.corpusRestDTO(
+                corpusRepository.findById(corpusId).orElse(null))));
   }
 }

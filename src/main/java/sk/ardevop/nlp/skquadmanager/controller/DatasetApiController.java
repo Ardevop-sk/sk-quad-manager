@@ -22,7 +22,7 @@ public class DatasetApiController implements DatasetApi {
   }
 
   @Override
-  public ResponseEntity<DatasetRestDTO> createCorpusDataset(@Valid DatasetBaseRestDTO datasetBaseRestDTO) {
+  public ResponseEntity<DatasetRestDTO> createCorpusDataset(String corpusId, @Valid DatasetBaseRestDTO datasetBaseRestDTO) {
     return ResponseEntity.ok(
         restDTOMapper.datasetRestDTO(
             datasetRepository.save(restDTOMapper.dataset(datasetBaseRestDTO))));
