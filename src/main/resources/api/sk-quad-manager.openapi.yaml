@@ -1,8 +1,8 @@
 openapi: "3.0.0"
 info:
   version: 1.0.0
-  title: Manager for sk-SQUAD corpus
-  description: Simple CRUD application for managing sk-SQUAD corpus
+  title: Manager for sk-QUAD corpus
+  description: Simple CRUD application for managing sk-QUAD corpus
   contact:
     name: Filip Bednárik
     email: info@ardevop.sk
@@ -11,7 +11,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 servers:
-  - url: https://sk-squad.ardevop.sk
+  - url: https://sk-quad.ardevop.sk
 paths:
   /corpus:
     post:
@@ -39,7 +39,7 @@ paths:
       tags:
         - corpus
       requestBody:
-        description: JSON object of whole SQUAD corpus
+        description: JSON object of whole QUAD corpus
         required: true
         content:
           application/json:

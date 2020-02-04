@@ -1,13 +1,13 @@
-package sk.ardevop.nlp.sksquadmanager.controller;
+package sk.ardevop.nlp.skquadmanager.controller;
 
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import sk.ardevop.nlp.sksquadmanager.api.CorpusApi;
-import sk.ardevop.nlp.sksquadmanager.controller.mapper.RestDTOMapper;
-import sk.ardevop.nlp.sksquadmanager.model.CorpusBaseRestDTO;
-import sk.ardevop.nlp.sksquadmanager.model.CorpusRestDTO;
-import sk.ardevop.nlp.sksquadmanager.repository.CorpusRepository;
+import sk.ardevop.nlp.skquadmanager.api.CorpusApi;
+import sk.ardevop.nlp.skquadmanager.controller.mapper.RestDTOMapper;
+import sk.ardevop.nlp.skquadmanager.model.CorpusBaseRestDTO;
+import sk.ardevop.nlp.skquadmanager.model.CorpusRestDTO;
+import sk.ardevop.nlp.skquadmanager.repository.CorpusRepository;
 
 @RestController
 public class CorpusApiController implements CorpusApi {

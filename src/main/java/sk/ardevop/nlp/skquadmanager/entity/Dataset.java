@@ -1,4 +1,4 @@
-package sk.ardevop.nlp.sksquadmanager.entity;
+package sk.ardevop.nlp.skquadmanager.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,2 +1,2 @@
-# sk-squad-manager
-CRUD application for managing sk-SQUAD corpus
+# sk-quad-manager
+CRUD application for managing sk-QUAD corpus

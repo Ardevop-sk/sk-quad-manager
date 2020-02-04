@@ -1,13 +1,13 @@
-package sk.ardevop.nlp.sksquadmanager.controller;
+package sk.ardevop.nlp.skquadmanager.controller;
 
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import sk.ardevop.nlp.sksquadmanager.api.DatasetApi;
-import sk.ardevop.nlp.sksquadmanager.controller.mapper.RestDTOMapper;
-import sk.ardevop.nlp.sksquadmanager.model.DatasetBaseRestDTO;
-import sk.ardevop.nlp.sksquadmanager.model.DatasetRestDTO;
-import sk.ardevop.nlp.sksquadmanager.repository.DatasetRepository;
+import sk.ardevop.nlp.skquadmanager.api.DatasetApi;
+import sk.ardevop.nlp.skquadmanager.controller.mapper.RestDTOMapper;
+import sk.ardevop.nlp.skquadmanager.model.DatasetBaseRestDTO;
+import sk.ardevop.nlp.skquadmanager.model.DatasetRestDTO;
+import sk.ardevop.nlp.skquadmanager.repository.DatasetRepository;
 
 @RestController
 public class DatasetApiController implements DatasetApi {
