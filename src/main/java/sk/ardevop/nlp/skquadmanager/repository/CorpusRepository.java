@@ -1,8 +1,8 @@
 package sk.ardevop.nlp.skquadmanager.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import sk.ardevop.nlp.skquadmanager.entity.Corpus;
 
-public interface CorpusRepository extends MongoRepository<Corpus, String> {
+public interface CorpusRepository extends PagingAndSortingRepository<Corpus, String> {
 
 }

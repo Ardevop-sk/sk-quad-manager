@@ -14,6 +14,31 @@ servers:
   - url: https://sk-quad.ardevop.sk
 paths:
   /corpus:
+    get:
+      summary: List all corpus
+      operationId: listCorpus
+      tags:
+        - corpus
+      responses:
+        '200':
+          description: A paged array of corpus
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Corpus"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     post:
       summary: Create new corpus
       operationId: createCorpus
@@ -99,7 +124,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Dataset"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dataset"
         default:
           description: unexpected error
           content:
@@ -141,6 +168,7 @@ paths:
   /dataset/{datasetId}:
     get:
       summary: Info for a specific dataset
+      operationId: getDataset
       tags:
         - dataset
       parameters:
@@ -157,6 +185,171 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Dataset"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /dataset/{datasetId}/paragraph:
+    get:
+      summary: List all paragraphs in dataset
+      operationId: listParagraphs
+      tags:
+        - dataset
+      parameters:
+        - name: datasetId
+          in: path
+          required: true
+          description: The id of the dataset
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A paged array of paragraphs in datasets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Paragraph"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a paragraph
+      operationId: createParagraph
+      tags:
+        - dataset
+      parameters:
+        - name: datasetId
+          in: path
+          required: true
+          description: The id of the dataset
+          schema:
+            type: string
+      requestBody:
+        description: Desc
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParagraphBase'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Paragraph"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /paragraph/{paragraphId}/question:
+    post:
+      summary: Create a question
+      operationId: createQuestion
+      tags:
+        - dataset
+      parameters:
+        - name: paragraphId
+          in: path
+          required: true
+          description: The id of the paragraph
+          schema:
+            type: string
+      requestBody:
+        description: Desc
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionBase'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /question/{questionId}/answer:
+    post:
+      summary: Create an answer
+      operationId: createAnswer
+      tags:
+        - dataset
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          description: The id of the question
+          schema:
+            type: string
+      requestBody:
+        description: Desc
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Answer'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Answer"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /question/{questionId}/plausibleAnswer:
+    post:
+      summary: Create an plausible answer
+      operationId: createPlausibleAnswer
+      tags:
+        - dataset
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          description: The id of the question
+          schema:
+            type: string
+      requestBody:
+        description: Desc
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Answer'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Answer"
         default:
           description: unexpected error
           content:
@@ -210,42 +403,54 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Paragraph'
-    Paragraph:
+    ParagraphBase:
       type: object
       required:
-        - qas
         - context
       properties:
-        id:
-          type: string
-        qas:
-          type: array
-          items:
-            $ref: '#/components/schemas/Qas'
         context:
           type: string
-    Qas:
+    Paragraph:
+      allOf:
+        - $ref: '#/components/schemas/ParagraphBase'
+        - type: object
+          required:
+            - qas
+          properties:
+            id:
+              type: string
+            qas:
+              type: array
+              items:
+                $ref: '#/components/schemas/Question'
+    QuestionBase:
       type: object
       required:
-        - id
         - question
         - is_impossible
-        - answers
       properties:
         question:
           type: string
-        id:
-          type: string
-        answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Answer'
         is_impossible:
           type: boolean
-        plaussible_answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Answer'
+    Question:
+      allOf:
+        - $ref: '#/components/schemas/QuestionBase'
+        - type: object
+          required:
+            - answers
+            - id
+          properties:
+            id:
+              type: string
+            answers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Answer'
+            plaussible_answers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Answer'
     Answer:
       type: object
       required:

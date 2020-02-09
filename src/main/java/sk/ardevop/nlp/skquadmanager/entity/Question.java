@@ -1,9 +1,12 @@
 package sk.ardevop.nlp.skquadmanager.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,16 +18,20 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Answer {
+public class Question {
 
   @Id
   @GeneratedValue(generator="system-uuid")
   @GenericGenerator(name="system-uuid", strategy = "uuid")
   private String id;
-  private String author;
-  private String text;
-  private Integer answerStart;
+
+  private String question;
   @ManyToOne
-  private Question question;
+  private Paragraph paragraph;
+  @OneToMany
+  private List<Answer> answers;
+  private Boolean isImpossible;
+  @OneToMany
+  private List<Answer> plaussibleAnswers;
 }
 
