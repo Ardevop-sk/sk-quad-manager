@@ -1,6 +1,7 @@
 package sk.ardevop.nlp.skquadmanager.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -24,7 +25,7 @@ public class Answer {
   private String author;
   private String text;
   private Integer answerStart;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private Question question;
 }
 

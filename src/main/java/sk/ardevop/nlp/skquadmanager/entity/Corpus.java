@@ -1,5 +1,6 @@
 package sk.ardevop.nlp.skquadmanager.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class Corpus {
   @GenericGenerator(name="system-uuid", strategy = "uuid")
   private String id;
   private String version;
-  @OneToMany
+  @OneToMany(cascade = CascadeType.REMOVE)
   private List<Dataset> data;
   private String language = "en";
 }

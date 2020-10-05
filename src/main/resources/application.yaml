@@ -1,5 +1,12 @@
 spring:
   datasource:
-    url: ${JDBC_URL:jdbc:h2:./sk-quad-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    url: ${JDBC_URL:jdbc:h2:./sk-quad-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE}
     username: ${JDBC_USER:sa}
     password: ${JDBC_PASSWORD:sa}
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE

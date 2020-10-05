@@ -80,6 +80,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
   /corpus/{corpusId}:
+    delete:
+      summary: Delete corpus by Id
+      operationId: deleteCorpus
+      tags:
+        - corpus
+      responses:
+        '200':
+          description: Success
+      parameters:
+        - name: corpusId
+          in: path
+          required: true
+          description: The id of the corpus to delete
+          schema:
+            type: string
     get:
       summary: Get corpus by Id
       operationId: getCorpus
@@ -166,6 +181,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /dataset/{datasetId}:
+    delete:
+      summary: Delete dataset by Id
+      operationId: deleteDataset
+      tags:
+        - dataset
+      responses:
+        '200':
+          description: Success
+      parameters:
+        - name: datasetId
+          in: path
+          required: true
+          description: The id of the dataset to delete
+          schema:
+            type: string
     get:
       summary: Info for a specific dataset
       operationId: getDataset
@@ -197,7 +227,7 @@ paths:
       summary: List all paragraphs in dataset
       operationId: listParagraphs
       tags:
-        - dataset
+        - paragraph
       parameters:
         - name: datasetId
           in: path
@@ -229,7 +259,7 @@ paths:
       summary: Create a paragraph
       operationId: createParagraph
       tags:
-        - dataset
+        - paragraph
       parameters:
         - name: datasetId
           in: path
@@ -257,12 +287,53 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /paragraph/{paragraphId}:
+    get:
+      summary: Info for a specific paragraph
+      operationId: getParagraph
+      tags:
+        - paragraph
+      parameters:
+        - name: paragraphId
+          in: path
+          required: true
+          description: The id of the paragraph to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Paragraph"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete paragraph by Id
+      operationId: deleteParagraph
+      tags:
+        - paragraph
+      responses:
+        '200':
+          description: Success
+      parameters:
+        - name: paragraphId
+          in: path
+          required: true
+          description: The id of the paragraph to delete
+          schema:
+            type: string
   /paragraph/{paragraphId}/question:
     post:
       summary: Create a question
       operationId: createQuestion
       tags:
-        - dataset
+        - question
       parameters:
         - name: paragraphId
           in: path
@@ -290,12 +361,53 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /question/{questionId}:
+    get:
+      summary: Info for a specific question
+      operationId: getQuestion
+      tags:
+        - question
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          description: The id of the question to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete question by Id
+      operationId: deleteQuestion
+      tags:
+        - question
+      responses:
+        '200':
+          description: Success
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          description: The id of the question to delete
+          schema:
+            type: string
   /question/{questionId}/answer:
     post:
       summary: Create an answer
       operationId: createAnswer
       tags:
-        - dataset
+        - question
       parameters:
         - name: questionId
           in: path
@@ -309,7 +421,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Answer'
+              $ref: '#/components/schemas/AnswerBase'
       responses:
         '200':
           description: Success
@@ -328,7 +440,7 @@ paths:
       summary: Create an plausible answer
       operationId: createPlausibleAnswer
       tags:
-        - dataset
+        - question
       parameters:
         - name: questionId
           in: path
@@ -356,6 +468,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /answer/{answerId}:
+    delete:
+      summary: Delete answer by Id
+      operationId: deleteAnswer
+      tags:
+        - question
+      responses:
+        '200':
+          description: Success
+      parameters:
+        - name: answerId
+          in: path
+          required: true
+          description: The id of the answer to delete
+          schema:
+            type: string
 components:
   schemas:
     CorpusBase:
@@ -452,6 +580,15 @@ components:
               items:
                 $ref: '#/components/schemas/Answer'
     Answer:
+      allOf:
+        - $ref: '#/components/schemas/AnswerBase'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+    AnswerBase:
       type: object
       required:
         - text

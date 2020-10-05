@@ -36,6 +36,12 @@ public class CorpusApiController implements CorpusApi {
   }
 
   @Override
+  public ResponseEntity<Void> deleteCorpus(String corpusId) {
+    corpusRepository.deleteById(corpusId);
+    return ResponseEntity.ok().build();
+  }
+
+  @Override
   public ResponseEntity<CorpusRestDTO> getCorpus(String corpusId) {
     return ResponseEntity.of(
         Optional.ofNullable(

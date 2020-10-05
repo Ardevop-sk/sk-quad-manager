@@ -6,6 +6,7 @@ import sk.ardevop.nlp.skquadmanager.entity.Corpus;
 import sk.ardevop.nlp.skquadmanager.entity.Dataset;
 import sk.ardevop.nlp.skquadmanager.entity.Paragraph;
 import sk.ardevop.nlp.skquadmanager.entity.Question;
+import sk.ardevop.nlp.skquadmanager.model.AnswerBaseRestDTO;
 import sk.ardevop.nlp.skquadmanager.model.AnswerRestDTO;
 import sk.ardevop.nlp.skquadmanager.model.CorpusBaseRestDTO;
 import sk.ardevop.nlp.skquadmanager.model.CorpusRestDTO;
@@ -32,7 +33,7 @@ public interface RestDTOMapper {
 
   QuestionRestDTO questionRestDTO(Question question);
 
-  Answer answer(AnswerRestDTO answerRestDTO);
+  Answer answer(AnswerBaseRestDTO answerRestDTO);
 
   AnswerRestDTO answerRestDTO(Answer answer);
 }
