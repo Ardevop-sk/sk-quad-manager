@@ -1,5 +1,7 @@
 package sk.ardevop.nlp.skquadmanager.controller.mapper;
 
+import static java.util.stream.Collectors.toList;
+
 import org.mapstruct.Mapper;
 import sk.ardevop.nlp.skquadmanager.entity.Answer;
 import sk.ardevop.nlp.skquadmanager.entity.Corpus;
@@ -19,10 +21,13 @@ import sk.ardevop.nlp.skquadmanager.model.QuestionRestDTO;
 
 @Mapper(componentModel = "spring")
 public interface RestDTOMapper {
+
   Corpus corpus(CorpusBaseRestDTO corpusBaseRestDTO);
+
   CorpusRestDTO corpusRestDTO(Corpus corpus);
 
   Dataset dataset(DatasetBaseRestDTO datasetBaseRestDTO);
+
   DatasetRestDTO datasetRestDTO(Dataset corpus);
 
   Paragraph paragraph(ParagraphBaseRestDTO paragraphBaseRestDTO);
@@ -31,7 +36,20 @@ public interface RestDTOMapper {
 
   Question question(QuestionBaseRestDTO questionBaseRestDTO);
 
-  QuestionRestDTO questionRestDTO(Question question);
+  default QuestionRestDTO questionRestDTO(Question question) {
+    if (question == null) {
+      return null;
+    }
+    return new QuestionRestDTO()
+        .id(question.getId())
+        .answers(question.getAnswers() == null ? null
+            : question.getAnswers().stream().map(this::answerRestDTO).collect(toList()))
+        .isImpossible(question.getIsImpossible())
+        .question(question.getQuestion())
+        .plaussibleAnswers(question.getPlaussibleAnswers() == null ? null :
+            question.getPlaussibleAnswers().stream().map(this::answerRestDTO).collect(toList()))
+        .paragraphText(question.getParagraph().getContext());
+  }
 
   Answer answer(AnswerBaseRestDTO answerRestDTO);
 
